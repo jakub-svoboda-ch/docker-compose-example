@@ -1,0 +1,26 @@
+services:
+  db:
+    build: ./mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: geheim
+      MYSQL_DATABASE: phpmyadmin
+      MYSQL_USER: phpmyadmin
+      MYSQL_PASSWORD: geheim
+    volumes:
+      - mysql-data:/var/lib/mysql
+  loadbalancer:
+    build: ./nginx
+    ports:
+      - 80:80
+  webgui:
+    build: ./phpmyadmin
+    environment:
+      PMA_HOST: db
+      PMA_PMADB: phpmyadmin
+      PMA_CONTROLUSER: phpmyadmin
+      PMA_CONTROLPASS: geheim
+      PMA_ABSOLUTE_URI: http://localhost:8080/pma/
+
+volumes:
+  mysql-data:
+
